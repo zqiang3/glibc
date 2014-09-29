@@ -1,5 +1,13 @@
 2018-05-07  Adhemerval Zanella  <adhemerval.zanella@linaro.org>
 
+	* sysdeps/unix/sysv/linux/x86_64/cancellation.S: Remove file.
+	* sysdeps/unix/sysv/linux/x86_64/libc-cancellation.S: Remove file.
+	* sysdeps/unix/sysv/linux/x86_64/librt-cancellation.S: Remove file.
+	* sysdeps/unix/sysv/linux/x86_64/sigcontextinfo.h (ucontext_get_pc):
+	New function.
+	* sysdeps/x86_64/nptl/tcb-offsets.sym (TCB_CANCELING_BITMASK):
+	Remove.
+
 	[BZ #12683]
 	* manual/llio.texi: Adjust comments regarding
 	pthread_enable_asynccancel and pthread_disable_asynccancel.

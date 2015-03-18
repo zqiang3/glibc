@@ -105,6 +105,7 @@ void (*argp_program_version_hook) (FILE *, struct argp_state *) = print_version;
 #define OPT_BIG_ENDIAN 401
 #define OPT_NO_WARN 402
 #define OPT_WARN 403
+#define OPT_UINT32_ALIGN 404
 
 /* Definitions of arguments for argp functions.  */
 static const struct argp_option options[] =
@@ -147,6 +148,8 @@ static const struct argp_option options[] =
     N_("Generate little-endian output") },
   { "big-endian", OPT_BIG_ENDIAN, NULL, 0,
     N_("Generate big-endian output") },
+  { "uint32-align", OPT_UINT32_ALIGN, "ALIGNMENT", 0,
+    N_("Set the target's uint32_t alignment in bytes (default 4)") },
   { NULL, 0, NULL, 0, NULL }
 };
 
@@ -236,12 +239,14 @@ main (int argc, char *argv[])
      ctype locale.  (P1003.2 4.35.5.2)  */
   setlocale (LC_CTYPE, "POSIX");
 
+#ifndef NO_SYSCONF
   /* Look whether the system really allows locale definitions.  POSIX
      defines error code 3 for this situation so I think it must be
      a fatal error (see P1003.2 4.35.8).  */
   if (sysconf (_SC_2_LOCALEDEF) < 0)
     record_error (3, 0, _("\
 FATAL: system does not define `_POSIX2_LOCALEDEF'"));
+#endif
 
   /* Process charmap file.  */
   charmap = charmap_read (charmap_file, verbose, 1, be_quiet, 1);
@@ -388,6 +393,9 @@ parse_opt (int key, char *arg, struct argp_state *state)
     case OPT_WARN:
       /* Enable the warnings.  */
       set_warnings (arg, true);
+      break;
+    case OPT_UINT32_ALIGN:
+      uint32_align_mask = strtol (arg, NULL, 0) - 1;
       break;
     case 'c':
       force_output = 1;

@@ -16,7 +16,24 @@
    License along with the GNU C Library; if not, see
    <http://www.gnu.org/licenses/>.  */
 
+#ifndef _SIGCONTEXTINFO_H
+#define _SIGCONTEXTINFO_H
+
 #include <signal.h>
+#include <stdint.h>
 
 #define SIGCONTEXT struct sigcontext *
 #define GET_PC(ctx)	((void *)((ctx)->sregs->regs.psw.addr))
+
+static inline uintptr_t
+ucontext_get_pc (const ucontext_t *uc)
+{
+#ifdef __s390x__
+  return uc->uc_mcontext.psw.addr;
+#else
+  /* We have 31bit addresses, remove bit 0.  */
+  return uc->uc_mcontext.psw.addr & 0x7FFFFFFF;
+#endif
+}
+
+#endif

@@ -16,6 +16,21 @@
    License along with the GNU C Library; if not, see
    <http://www.gnu.org/licenses/>.  */
 
+#ifndef _SIGCONTEXTINFO_H
+#define _SIGCONTEXTINFO_H
+
+#include <stdint.h>
+
 /* In general we cannot provide any information.  */
 #define SIGCONTEXT struct sigcontext *
 #define GET_PC(ctx)	((void *) 0)
+
+/* Obtain the Program Counter from third argument in signal handler set
+   with SA_SIGINFO.  */
+static inline uintptr_t
+ucontext_get_pc (void *ctx)
+{
+  return GET_PC (ctx);
+}
+
+#endif

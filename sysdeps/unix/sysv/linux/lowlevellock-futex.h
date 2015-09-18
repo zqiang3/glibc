@@ -89,6 +89,12 @@
      ? -INTERNAL_SYSCALL_ERRNO (__ret, __err) : 0);                     \
   })
 
+#define lll_futex_syscall_cp(...)					\
+  ({                                                                    \
+    long int __ret = __SYSCALL_CANCEL_CALL (__VA_ARGS__);		\
+    __ret;								\
+  })
+
 #define lll_futex_wait(futexp, val, private) \
   lll_futex_timed_wait (futexp, val, NULL, private)
 
@@ -143,13 +149,29 @@
 
 /* Cancellable futex macros.  */
 #define lll_futex_wait_cancel(futexp, val, private) \
-  ({                                                                   \
-    int __oldtype = CANCEL_ASYNC ();				       \
-    long int __err = lll_futex_wait (futexp, val, LLL_SHARED);	       \
-    CANCEL_RESET (__oldtype);					       \
-    __err;							       \
+  lll_futex_timed_wait_cancel (futexp, val, NULL, private)
+
+#define lll_futex_timed_wait_cancel(futexp, val, timeout, private)	\
+  ({									\
+    long int __ret;							\
+    int __op = FUTEX_WAIT;						\
+    __ret = lll_futex_syscall_cp (futex, futexp,			\
+				  __lll_private_flag (__op, private),	\
+				  val, timeout);			\
+    __ret;								\
   })
 
+#define lll_futex_timed_wait_bitset_cancel(futexp, val, timeout,	\
+                                           clockbit, private)		\
+  ({									\
+    long int __ret;							\
+    int __op = FUTEX_WAIT_BITSET | clockbit;				\
+    __ret = lll_futex_syscall_cp (futex, futexp,			\
+				  __lll_private_flag (__op, private), 	\
+				  val, timeout, 0,			\
+				  FUTEX_BITSET_MATCH_ANY);		\
+    __ret;								\
+  })
 
 #endif  /* !__ASSEMBLER__  */
 

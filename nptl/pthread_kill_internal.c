@@ -1,6 +1,6 @@
-/* Copyright (C) 2002-2018 Free Software Foundation, Inc.
+/* Send a signal to a specific pthread.  Internal version.
+   Copyright (C) 2018 Free Software Foundation, Inc.
    This file is part of the GNU C Library.
-   Contributed by Ulrich Drepper <drepper@redhat.com>, 2002.
 
    The GNU C Library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Lesser General Public
@@ -16,9 +16,11 @@
    License along with the GNU C Library; if not, see
    <http://www.gnu.org/licenses/>.  */
 
-#include <nptl/pthreadP.h>
+#include <pthreadP.h>
 
-
-#define __pthread_enable_asynccancel __librt_enable_asynccancel
-#define __pthread_disable_asynccancel __librt_disable_asynccancel
-#include <nptl/cancellation.c>
+int
+__pthread_kill_internal (pthread_t threadid, int signo)
+{
+  return ENOSYS;
+}
+hidden_def (__pthread_kill_internal)

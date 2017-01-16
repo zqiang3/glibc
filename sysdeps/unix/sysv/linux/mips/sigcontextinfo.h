@@ -16,7 +16,10 @@
    License along with the GNU C Library.  If not, see
    <http://www.gnu.org/licenses/>.  */
 
+#ifndef _SIGCONTEXTINFO_H
+#define _SIGCONTEXTINFO_H
 
+#include <stdint.h>
 #include <sgidefs.h>
 
 #if _MIPS_SIM == _ABIO32
@@ -29,4 +32,12 @@
 #define SIGCONTEXT unsigned long _code, ucontext_t *
 #define GET_PC(ctx)	((void *) (unsigned long) ctx->uc_mcontext.pc)
 
-#endif
+#endif /* _MIPS_SIM == _ABIO32  */
+
+static inline uintptr_t
+ucontext_get_pc (const ucontext_t *uc)
+{
+  return uc->uc_mcontext.pc;
+}
+
+#endif /* _SIGCONTEXTINFO_H  */

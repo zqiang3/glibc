@@ -15,5 +15,29 @@
    License along with the GNU C Library; if not, see
    <http://www.gnu.org/licenses/>.  */
 
+#ifndef _SIGCONTEXTINFO_H
+#define _SIGCONTEXTINFO_H
+
+#include <stdint.h>
+
 #define SIGCONTEXT siginfo_t *_si, struct sigcontext *
 #define GET_PC(ctx)	((ctx)->sc_ip)
+
+/* Different that other architectures, ia64 pass a sigcontext_t struct
+   in third argument for sa_sigaction handler with SA_SIGINFO.  */
+static inline uintptr_t
+ucontext_get_pc (const struct sigcontext *sigctx)
+{
+  return sigctx->sc_ip;
+}
+
+static inline sigset_t *
+ucontext_get_mask (const struct sigcontext *sigctx)
+{
+  /* IA64 sigcontext::sa_mask is a sigset_t since Linux 2.6.12 (initial
+     git repository build).  */
+  return (sigset_t *) &sigctx->sc_mask;
+}
+#define UCONTEXT_SIGMASK(ctx) ucontext_get_mask (ctx)
+
+#endif /* _SIGCONTEXTINFO_H  */

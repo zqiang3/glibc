@@ -15,5 +15,18 @@
    License along with the GNU C Library.  If not, see
    <http://www.gnu.org/licenses/>.  */
 
+#ifndef _SIGCONTEXTINFO_H
+#define _SIGCONTEXTINFO_H
+
+#include <stdint.h>
+
 #define SIGCONTEXT int _code, struct sigcontext *
 #define GET_PC(ctx)	((void *) (ctx)->sc_pc)
+
+static inline uintptr_t
+ucontext_get_pc (const ucontext_t *uc)
+{
+  return uc->uc_mcontext.sc_pc;
+}
+
+#endif /* _SIGCONTEXTINFO_H  */

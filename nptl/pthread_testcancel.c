@@ -23,7 +23,9 @@
 void
 __pthread_testcancel (void)
 {
-  CANCELLATION_P (THREAD_SELF);
+  struct pthread *pd = (struct pthread *) THREAD_SELF;
+  if (pd->cancelhandling && pd->cancelstate == PTHREAD_CANCEL_ENABLE)
+    __do_cancel ();
 }
 strong_alias (__pthread_testcancel, pthread_testcancel)
 hidden_def (__pthread_testcancel)

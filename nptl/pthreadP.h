@@ -281,7 +281,7 @@ __do_cancel_with_result (void *result)
   /* Make sure we get no more cancellations.  */
   self->cancelstate = PTHREAD_CANCEL_DISABLE;
 
-  THREAD_ATOMIC_BIT_SET (self, cancelhandling, EXITING_BIT);
+  atomic_fetch_or_acquire (&self->cancelhandling, THREAD_EXITING);
 
   THREAD_SETMEM (self, result, result);
 

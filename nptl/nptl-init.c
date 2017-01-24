@@ -204,7 +204,7 @@ sigcancel_handler (int sig, siginfo_t *si, void *ctx)
   struct pthread *self = THREAD_SELF;
 
   if ((self->cancelstate == PTHREAD_CANCEL_DISABLE)
-      || ((self->cancelhandling & CANCELED_BITMASK) == 0))
+      || (atomic_load_relaxed (&self->cancelhandling) & THREAD_CANCELED) == 0)
     return;
 
   /* Add SIGCANCEL on ignored sigmask to avoid the handler to be called

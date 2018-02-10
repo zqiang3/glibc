@@ -27,6 +27,10 @@
 
 #include <timezone/tzfile.h>
 
+/* __REDIRECT isn't transitive.  */
+#undef sscanf
+#define sscanf __isoc99_sscanf
+
 #define SECSPERDAY 86400
 
 char *__tzname[2] = { (char *) "GMT", (char *) "GMT" };

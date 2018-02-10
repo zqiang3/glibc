@@ -61,6 +61,7 @@ tests := tstscanf test_rdwr test-popen tstgetln test-fseek \
 	 tst-printf-bz18872 tst-vfprintf-width-prec tst-fmemopen4 \
 	 tst-vfprintf-user-type \
 	 tst-vfprintf-mbs-prec \
+	 scanf14a scanf16a
 
 test-srcs = tst-unbputc tst-printf
 
@@ -136,13 +137,11 @@ CFLAGS-isoc99_scanf.c += -fexceptions
 CFLAGS-errlist.c += $(fno-unit-at-a-time)
 CFLAGS-siglist.c += $(fno-unit-at-a-time)
 
-# The following is a hack since we must compile scanf1{5,7}.c without any
-# GNU extension.  The latter are needed, though, when internal headers
-# are used.  So made sure we see the installed headers first.
-CFLAGS-scanf15.c += -I../libio -I../stdlib -I../wcsmbs -I../time -I../string \
-		   -I../wctype
-CFLAGS-scanf17.c += -I../libio -I../stdlib -I../wcsmbs -I../time -I../string \
-		   -I../wctype
+# scanf14a.c and scanf16a.c test a deprecated extension which is no
+# longer visible under most conformance levels; see the source files
+# for more detail.
+CFLAGS-scanf14a.c += -std=gnu89
+CFLAGS-scanf16a.c += -std=gnu89
 
 # tst-gets.c tests a deprecated function.
 CFLAGS-tst-gets.c += -Wno-deprecated-declarations

@@ -28,6 +28,23 @@ Deprecated and removed features, and other changes affecting compatibility:
    investigate using (f)getc_unlocked and (f)putc_unlocked, and, if
    necessary, flockfile and funlockfile.
 
+ * An archaic GNU extension to scanf, under which '%as', '%aS', and '%a[...]'
+   meant to scan a string and allocate space for it with malloc, is now
+   restricted to programs compiled in C89 mode, with _GNU_SOURCE defined.
+   It was formerly available to programs compiled as C99 or higher that
+   defined _GNU_SOURCE, and to programs compiled as C89 whether or not
+   they defined _GNU_SOURCE.
+
+   We are phasing this extension out because it conflicts with C99's use of
+   '%a' for floating-point numbers.  POSIX.1-2008 includes the feature of
+   allocating a buffer for string input with malloc, using the modifier
+   letter 'm' instead.  Programs using '%as', '%aS', or '%a[...]' with the
+   old GNU meaning should change to '%ms', '%mS', or '%m[...]' respectively.
+
+   GCC's -Wformat warnings can detect most uses of this extension, as long
+   as all functions that call vscanf, vfscanf, or vsscanf are annotated with
+   __attribute__ ((format (scanf, ...))).
+
  * The macros 'major', 'minor', and 'makedev' are now only available from
    the header <sys/sysmacros.h>; not from <sys/types.h> or various other
    headers that happen to include <sys/types.h>.  These macros are rarely

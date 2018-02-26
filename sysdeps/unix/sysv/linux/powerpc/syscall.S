@@ -19,6 +19,7 @@
 
 ENTRY (syscall)
 	ABORT_TRANSACTION
+	cfi_def_cfa_offset (0)
 	mr   r0,r3
 	mr   r3,r4
 	mr   r4,r5

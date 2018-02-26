@@ -1,3 +1,8 @@
+2018-05-07  Adhemerval Zanella  <adhemerval.zanella@linaro.org>
+
+	* sysdeps/unix/sysv/linux/powerpc/syscall.S (syscall): Create stack
+	frame.
+
 2018-05-07  Alexandre Oliva <oliva@gnu.org>
 
 	Revert:

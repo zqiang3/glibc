@@ -54,6 +54,17 @@ extern ssize_t strfmon_l (char *__restrict __s, size_t __maxsize,
 # include <bits/monetary-ldbl.h>
 #endif
 
+/* XXX: DO NOT COMMIT.
+
+   On powerpc64le, the implementation of long double with IEEE binary128
+   format is not complete.  The redirections of the monetary.h functions
+   are supposed to be implemented in bits/monetary-ldbl.h, however, we can
+   only redirect all or none.  In the meantime, bits/monetary-ieee128.h
+   allows us to redirect part of them for testing purposes.  */
+#if __LONG_DOUBLE_USES_FLOAT128
+# include <bits/monetary-ieee128.h>
+#endif
+
 __END_DECLS
 
 #endif	/* monetary.h */

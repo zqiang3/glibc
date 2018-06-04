@@ -49,10 +49,23 @@ extern int error_one_per_line;
 
 #ifdef __LDBL_COMPAT
 # include <bits/error-ldbl.h>
-#else
+#endif
+
+/* XXX: DO NOT COMMIT.
+
+   On powerpc64le, the implementation of long double with IEEE binary128
+   format is not complete.  The redirections of the error.h functions
+   are temporarily implemented in bits/error-ieee128.h.  */
+#include <bits/floatn.h>
+#if __LONG_DOUBLE_USES_FLOAT128
+# include <bits/error-ieee128.h>
+#endif
+
 /* Do not inline error and error_at_line when long double has the same
-   size of double, because that would invalidate the redirections to the
+   size of double, nor when long double reuses the float128
+   implementation, because that would invalidate the redirections to the
    compatibility functions.  */
+#if !defined __LDBL_COMPAT && !__LONG_DOUBLE_USES_FLOAT128
 # if defined __extern_always_inline && defined __va_arg_pack
 #  include <bits/error.h>
 # endif

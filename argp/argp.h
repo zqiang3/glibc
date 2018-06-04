@@ -558,6 +558,16 @@ __NTH (__option_is_end (const struct argp_option *__opt))
 # include <bits/argp-ldbl.h>
 #endif
 
+/* XXX: DO NOT COMMIT.
+
+   On powerpc64le, the implementation of long double with IEEE binary128
+   format is not complete.  The redirections of the argp.h functions
+   are temporarily implemented in bits/argp-ieee128.h.  */
+#include <bits/floatn.h>
+#if __LONG_DOUBLE_USES_FLOAT128
+# include <bits/argp-ieee128.h>
+#endif
+
 __END_DECLS
 
 #endif /* argp.h */

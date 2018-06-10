@@ -88,6 +88,42 @@ $(objpfx)test-printf-size-ibm128.out: \
 	$(evaluate-test)
 endif
 
+ifeq ($(subdir),debug)
+ldbl-extra-routines += asprintf_chk \
+		       dprintf_chk \
+		       fprintf_chk \
+		       printf_chk \
+		       snprintf_chk \
+		       sprintf_chk \
+		       vasprintf_chk \
+		       vdprintf_chk \
+		       vfprintf_chk \
+		       vprintf_chk \
+		       vsnprintf_chk \
+		       vsprintf_chk
+
+tests-internal += test-printf-chk-ieee128 test-printf-chk-ibm128
+CFLAGS-test-printf-chk-ieee128.c += -mfloat128 -mabi=ieeelongdouble -Wno-psabi
+CFLAGS-test-printf-chk-ibm128.c += -mabi=ibmlongdouble -Wno-psabi
+
+ifeq ($(run-built-tests),yes)
+tests-special += $(objpfx)test-printf-chk-ieee128.out
+tests-special += $(objpfx)test-printf-chk-ibm128.out
+endif
+
+$(objpfx)test-printf-chk-ieee128.out: \
+  ../sysdeps/ieee754/ldbl-128ibm-compat/test-printf-chk-ldbl-compat.sh \
+  $(objpfx)test-printf-chk-ieee128
+	$(SHELL) $^ '$(test-program-prefix)' $@; \
+	$(evaluate-test)
+
+$(objpfx)test-printf-chk-ibm128.out: \
+  ../sysdeps/ieee754/ldbl-128ibm-compat/test-printf-chk-ldbl-compat.sh \
+  $(objpfx)test-printf-chk-ibm128
+	$(SHELL) $^ '$(test-program-prefix)' $@; \
+	$(evaluate-test)
+endif
+
 # Add IEEE binary128 files as make targets.
 routines += $(foreach r,$(ldbl-extra-routines),ieee128-$(r))
 

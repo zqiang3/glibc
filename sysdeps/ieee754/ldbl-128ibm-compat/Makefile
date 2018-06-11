@@ -100,15 +100,28 @@ ldbl-extra-routines += asprintf_chk \
 		       vfprintf_chk \
 		       vprintf_chk \
 		       vsnprintf_chk \
-		       vsprintf_chk
+		       vsprintf_chk \
+		       fwprintf_chk \
+		       swprintf_chk \
+		       wprintf_chk \
+		       vfwprintf_chk \
+		       vswprintf_chk \
+		       vwprintf_chk
 
 tests-internal += test-printf-chk-ieee128 test-printf-chk-ibm128
 CFLAGS-test-printf-chk-ieee128.c += -mfloat128 -mabi=ieeelongdouble -Wno-psabi
 CFLAGS-test-printf-chk-ibm128.c += -mabi=ibmlongdouble -Wno-psabi
 
+tests-internal += test-wprintf-chk-ieee128 test-wprintf-chk-ibm128
+CFLAGS-test-wprintf-chk-ieee128.c += -mfloat128 -mabi=ieeelongdouble -Wno-psabi
+CFLAGS-test-wprintf-chk-ibm128.c += -mabi=ibmlongdouble -Wno-psabi
+
 ifeq ($(run-built-tests),yes)
 tests-special += $(objpfx)test-printf-chk-ieee128.out
 tests-special += $(objpfx)test-printf-chk-ibm128.out
+
+tests-special += $(objpfx)test-wprintf-chk-ieee128.out
+tests-special += $(objpfx)test-wprintf-chk-ibm128.out
 endif
 
 $(objpfx)test-printf-chk-ieee128.out: \
@@ -120,6 +133,18 @@ $(objpfx)test-printf-chk-ieee128.out: \
 $(objpfx)test-printf-chk-ibm128.out: \
   ../sysdeps/ieee754/ldbl-128ibm-compat/test-printf-chk-ldbl-compat.sh \
   $(objpfx)test-printf-chk-ibm128
+	$(SHELL) $^ '$(test-program-prefix)' $@; \
+	$(evaluate-test)
+
+$(objpfx)test-wprintf-chk-ieee128.out: \
+  ../sysdeps/ieee754/ldbl-128ibm-compat/test-wprintf-chk-ldbl-compat.sh \
+  $(objpfx)test-wprintf-chk-ieee128
+	$(SHELL) $^ '$(test-program-prefix)' $@; \
+	$(evaluate-test)
+
+$(objpfx)test-wprintf-chk-ibm128.out: \
+  ../sysdeps/ieee754/ldbl-128ibm-compat/test-wprintf-chk-ldbl-compat.sh \
+  $(objpfx)test-wprintf-chk-ibm128
 	$(SHELL) $^ '$(test-program-prefix)' $@; \
 	$(evaluate-test)
 endif

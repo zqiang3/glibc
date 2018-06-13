@@ -209,6 +209,41 @@ $(objpfx)test-wprintf-chk-ibm128.out: \
 	$(evaluate-test)
 endif
 
+ifeq ($(subdir),argp)
+ldbl-extra-routines += argp-help
+
+$(objpfx)tst-ieee128-argp-%.c: tst-ldbl-argp-%.c
+	cp $< $@
+
+$(objpfx)tst-ibm128-argp-%.c: tst-ldbl-argp-%.c
+	cp $< $@
+
+tests-internal += tst-ieee128-argp-error tst-ibm128-argp-error
+CFLAGS-tst-ieee128-argp-error.c += -mfloat128 -mabi=ieeelongdouble -Wno-psabi
+CFLAGS-tst-ibm128-argp-error.c += -mabi=ibmlongdouble -Wno-psabi
+
+tests-internal += tst-ieee128-argp-failure tst-ibm128-argp-failure
+CFLAGS-tst-ieee128-argp-failure.c += -mfloat128 -mabi=ieeelongdouble -Wno-psabi
+CFLAGS-tst-ibm128-argp-failure.c += -mabi=ibmlongdouble -Wno-psabi
+
+ifeq ($(run-built-tests),yes)
+tests-special += $(objpfx)tst-ieee128-argp-error.out
+tests-special += $(objpfx)tst-ibm128-argp-error.out
+tests-special += $(objpfx)tst-ieee128-argp-failure.out
+tests-special += $(objpfx)tst-ibm128-argp-failure.out
+endif
+
+$(objpfx)tst-ieee128-argp-%.out: \
+  tst-ldbl-argp-%.sh $(objpfx)tst-ieee128-argp-%
+	$(SHELL) $^ '$(test-program-prefix)' $@; \
+	$(evaluate-test)
+
+$(objpfx)tst-ibm128-argp-%.out: \
+  tst-ldbl-argp-%.sh $(objpfx)tst-ibm128-argp-%
+	$(SHELL) $^ '$(test-program-prefix)' $@; \
+	$(evaluate-test)
+endif
+
 # Add IEEE binary128 files as make targets.
 routines += $(foreach r,$(ldbl-extra-routines),ieee128-$(r))
 

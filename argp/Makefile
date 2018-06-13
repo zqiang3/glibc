@@ -35,4 +35,16 @@ CFLAGS-argp-fmtstream.c += -fexceptions
 bug-argp1-ARGS = -- --help
 bug-argp2-ARGS = -- -d 111 --dstaddr 222 -p 333 --peer 444
 
+tests-internal += tst-ldbl-argp-error tst-ldbl-argp-failure
+
+ifeq ($(run-built-tests),yes)
+tests-special += $(objpfx)tst-ldbl-argp-error.out
+tests-special += $(objpfx)tst-ldbl-argp-failure.out
+endif
+
+$(objpfx)tst-ldbl-argp-%.out: \
+  tst-ldbl-argp-%.sh $(objpfx)tst-ldbl-argp-%
+	$(SHELL) $^ '$(test-program-prefix)' $@; \
+	$(evaluate-test)
+
 include ../Rules

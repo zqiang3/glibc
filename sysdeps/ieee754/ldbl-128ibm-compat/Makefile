@@ -247,6 +247,79 @@ endif
 ifeq ($(subdir),misc)
 ldbl-extra-routines += err \
 		       error
+
+tests-internal += tst-ibm128-warn tst-ieee128-warn
+
+tests-internal += tst-ibm128-error-err tst-ieee128-error-err
+tests-internal += tst-ibm128-error-errx tst-ieee128-error-errx
+tests-internal += tst-ibm128-error-verr tst-ieee128-error-verr
+tests-internal += tst-ibm128-error-verrx tst-ieee128-error-verrx
+
+tests-internal += tst-ibm128-error-error tst-ieee128-error-error
+tests-internal += tst-ibm128-error-error_at_line tst-ieee128-error-error_at_line
+
+$(objpfx)tst-ibm128-%.c: tst-ldbl-%.c
+	cp $< $@
+
+$(objpfx)tst-ieee128-%.c: tst-ldbl-%.c
+	cp $< $@
+
+CFLAGS-tst-ibm128-warn.c += -mabi=ibmlongdouble -Wno-psabi
+
+CFLAGS-tst-ibm128-error-err.c += -mabi=ibmlongdouble -Wno-psabi
+CFLAGS-tst-ibm128-error-errx.c += -mabi=ibmlongdouble -Wno-psabi
+CFLAGS-tst-ibm128-error-verr.c += -mabi=ibmlongdouble -Wno-psabi
+CFLAGS-tst-ibm128-error-verrx.c += -mabi=ibmlongdouble -Wno-psabi
+
+CFLAGS-tst-ibm128-error-error.c += -mabi=ibmlongdouble -Wno-psabi
+CFLAGS-tst-ibm128-error-error_at_line.c += -mabi=ibmlongdouble -Wno-psabi
+
+CFLAGS-tst-ieee128-warn.c += -mfloat128 -mabi=ieeelongdouble -Wno-psabi
+
+CFLAGS-tst-ieee128-error-err.c += -mfloat128 -mabi=ieeelongdouble -Wno-psabi
+CFLAGS-tst-ieee128-error-errx.c += -mfloat128 -mabi=ieeelongdouble -Wno-psabi
+CFLAGS-tst-ieee128-error-verr.c += -mfloat128 -mabi=ieeelongdouble -Wno-psabi
+CFLAGS-tst-ieee128-error-verrx.c += -mfloat128 -mabi=ieeelongdouble -Wno-psabi
+
+CFLAGS-tst-ieee128-error-error.c += -mfloat128 -mabi=ieeelongdouble -Wno-psabi
+CFLAGS-tst-ieee128-error-error_at_line.c += -mfloat128 -mabi=ieeelongdouble -Wno-psabi
+
+ifeq ($(run-built-tests),yes)
+tests-special += $(objpfx)tst-ibm128-warn.out
+
+tests-special += $(objpfx)tst-ibm128-error-err.out
+tests-special += $(objpfx)tst-ibm128-error-errx.out
+tests-special += $(objpfx)tst-ibm128-error-verr.out
+tests-special += $(objpfx)tst-ibm128-error-verrx.out
+
+tests-special += $(objpfx)tst-ibm128-error-error.out
+tests-special += $(objpfx)tst-ibm128-error-error_at_line.out
+
+tests-special += $(objpfx)tst-ieee128-warn.out
+
+tests-special += $(objpfx)tst-ieee128-error-err.out
+tests-special += $(objpfx)tst-ieee128-error-errx.out
+tests-special += $(objpfx)tst-ieee128-error-verr.out
+tests-special += $(objpfx)tst-ieee128-error-verrx.out
+
+tests-special += $(objpfx)tst-ieee128-error-error.out
+tests-special += $(objpfx)tst-ieee128-error-error_at_line.out
+endif
+
+$(objpfx)tst-%-warn.out: \
+  tst-ldbl-warn.sh $(objpfx)tst-%-warn
+	$(SHELL) $^ '$(test-program-prefix)' $@; \
+	$(evaluate-test)
+
+$(objpfx)tst-ibm128-error-%.out: \
+  tst-ldbl-error.sh $(objpfx)tst-ibm128-error-%
+	$(SHELL) $^ '$(test-program-prefix)' $@; \
+	$(evaluate-test)
+
+$(objpfx)tst-ieee128-error-%.out: \
+  tst-ldbl-error.sh $(objpfx)tst-ieee128-error-%
+	$(SHELL) $^ '$(test-program-prefix)' $@; \
+	$(evaluate-test)
 endif
 
 # Add IEEE binary128 files as make targets.

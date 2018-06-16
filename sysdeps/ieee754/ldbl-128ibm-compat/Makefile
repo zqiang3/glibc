@@ -245,7 +245,8 @@ $(objpfx)tst-ibm128-argp-%.out: \
 endif
 
 ifeq ($(subdir),misc)
-ldbl-extra-routines += err
+ldbl-extra-routines += err \
+		       error
 endif
 
 # Add IEEE binary128 files as make targets.

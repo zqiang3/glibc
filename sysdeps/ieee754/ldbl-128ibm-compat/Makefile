@@ -314,7 +314,8 @@ endif
 
 ifeq ($(subdir),misc)
 ldbl-extra-routines += err \
-		       error
+		       error \
+		       syslog
 
 tests-internal += tst-ibm128-warn tst-ieee128-warn
 
@@ -352,6 +353,14 @@ CFLAGS-tst-ieee128-error-verrx.c += -mfloat128 -mabi=ieeelongdouble -Wno-psabi
 CFLAGS-tst-ieee128-error-error.c += -mfloat128 -mabi=ieeelongdouble -Wno-psabi
 CFLAGS-tst-ieee128-error-error_at_line.c += -mfloat128 -mabi=ieeelongdouble -Wno-psabi
 
+tests-internal += test-syslog-ieee128 test-syslog-ibm128
+CFLAGS-test-syslog-ieee128.c += -mfloat128 -mabi=ieeelongdouble -Wno-psabi
+CFLAGS-test-syslog-ibm128.c += -mabi=ibmlongdouble -Wno-psabi
+
+tests-internal += test-syslog-chk-ieee128 test-syslog-chk-ibm128
+CFLAGS-test-syslog-chk-ieee128.c += -mfloat128 -mabi=ieeelongdouble -Wno-psabi
+CFLAGS-test-syslog-chk-ibm128.c += -mabi=ibmlongdouble -Wno-psabi
+
 ifeq ($(run-built-tests),yes)
 tests-special += $(objpfx)tst-ibm128-warn.out
 
@@ -372,6 +381,12 @@ tests-special += $(objpfx)tst-ieee128-error-verrx.out
 
 tests-special += $(objpfx)tst-ieee128-error-error.out
 tests-special += $(objpfx)tst-ieee128-error-error_at_line.out
+
+tests-special += $(objpfx)test-syslog-ieee128.out
+tests-special += $(objpfx)test-syslog-ibm128.out
+
+tests-special += $(objpfx)test-syslog-chk-ieee128.out
+tests-special += $(objpfx)test-syslog-chk-ibm128.out
 endif
 
 $(objpfx)tst-%-warn.out: \
@@ -386,6 +401,30 @@ $(objpfx)tst-ibm128-error-%.out: \
 
 $(objpfx)tst-ieee128-error-%.out: \
   tst-ldbl-error.sh $(objpfx)tst-ieee128-error-%
+	$(SHELL) $^ '$(test-program-prefix)' $@; \
+	$(evaluate-test)
+
+$(objpfx)test-syslog-ieee128.out: \
+  ../sysdeps/ieee754/ldbl-128ibm-compat/test-syslog-ldbl-compat.sh \
+  $(objpfx)test-syslog-ieee128
+	$(SHELL) $^ '$(test-program-prefix)' $@; \
+	$(evaluate-test)
+
+$(objpfx)test-syslog-ibm128.out: \
+  ../sysdeps/ieee754/ldbl-128ibm-compat/test-syslog-ldbl-compat.sh \
+  $(objpfx)test-syslog-ibm128
+	$(SHELL) $^ '$(test-program-prefix)' $@; \
+	$(evaluate-test)
+
+$(objpfx)test-syslog-chk-ieee128.out: \
+  ../sysdeps/ieee754/ldbl-128ibm-compat/test-syslog-ldbl-compat.sh \
+  $(objpfx)test-syslog-chk-ieee128
+	$(SHELL) $^ '$(test-program-prefix)' $@; \
+	$(evaluate-test)
+
+$(objpfx)test-syslog-chk-ibm128.out: \
+  ../sysdeps/ieee754/ldbl-128ibm-compat/test-syslog-ldbl-compat.sh \
+  $(objpfx)test-syslog-chk-ibm128
 	$(SHELL) $^ '$(test-program-prefix)' $@; \
 	$(evaluate-test)
 endif

@@ -8,5 +8,6 @@ extern ssize_t __vstrfmon_l_internal (char *s, size_t maxsize, locale_t loc,
 
 /* Flags for __vstrfmon_l_internal.  */
 #define STRFMON_LDBL_IS_DBL 0x0001
+#define STRFMON_LDBL_USES_FLOAT128  0x0002
 
 #endif

@@ -176,3 +176,24 @@ tests += test-narrow-macros-ldbl-64
 CFLAGS-test-narrow-macros-ldbl-64.c += -mlong-double-64
 
 endif
+
+# Tests for argp.h functions (reusing the relevant tests from argp/)
+ifeq ($(subdir),argp)
+tests-internal += tst-nldbl-argp-error tst-nldbl-argp-failure
+
+$(objpfx)tst-nldbl-argp-%.c: tst-ldbl-argp-%.c
+	cp $< $@
+
+CFLAGS-tst-nldbl-argp-error.c += -mlong-double-64
+CFLAGS-tst-nldbl-argp-failure.c += -mlong-double-64
+
+ifeq ($(run-built-tests),yes)
+tests-special += $(objpfx)tst-nldbl-argp-error.out
+tests-special += $(objpfx)tst-nldbl-argp-failure.out
+endif
+
+$(objpfx)tst-nldbl-argp-%.out: \
+  tst-ldbl-argp-%.sh $(objpfx)tst-nldbl-argp-%
+	$(SHELL) $^ '$(test-program-prefix)' $@; \
+	$(evaluate-test)
+endif

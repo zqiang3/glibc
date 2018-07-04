@@ -2228,3 +2228,5 @@ GLIBC_2.28 thrd_current F
 GLIBC_2.28 thrd_equal F
 GLIBC_2.28 thrd_sleep F
 GLIBC_2.28 thrd_yield F
+GLIBC_2.29 __nldbl_argp_error F
+GLIBC_2.29 __nldbl_argp_failure F

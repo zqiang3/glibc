@@ -17,6 +17,7 @@
    License along with the GNU C Library; if not, see
    <http://www.gnu.org/licenses/>.  */
 
+#include <argp.h>
 #include <stdarg.h>
 #include <stdio.h>
 #include <libio/strfile.h>
@@ -1011,6 +1012,26 @@ __nldbl___isoc99_wscanf (const wchar_t *fmt, ...)
   va_end (ap);
 
   return ret;
+}
+
+void
+__nldbl_argp_error (const struct argp_state *state, const char *fmt, ...)
+{
+  va_list ap;
+  va_start (ap, fmt);
+  __argp_error_internal (state, fmt, ap, PRINTF_LDBL_IS_DBL);
+  va_end (ap);
+}
+
+void
+__nldbl_argp_failure (const struct argp_state *state, int status,
+			int errnum, const char *fmt, ...)
+{
+  va_list ap;
+  va_start (ap, fmt);
+  __argp_failure_internal (state, status, errnum, fmt, ap,
+			   PRINTF_LDBL_IS_DBL);
+  va_end (ap);
 }
 
 #if LONG_DOUBLE_COMPAT(libc, GLIBC_2_0)

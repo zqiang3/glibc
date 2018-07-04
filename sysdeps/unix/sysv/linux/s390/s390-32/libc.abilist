@@ -2480,3 +2480,5 @@ GLIBC_2.9 pututline F
 GLIBC_2.9 pututxline F
 GLIBC_2.9 updwtmp F
 GLIBC_2.9 updwtmpx F
+GLIBC_2.29 __nldbl_argp_error F
+GLIBC_2.29 __nldbl_argp_failure F

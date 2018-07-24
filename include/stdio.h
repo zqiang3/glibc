@@ -147,7 +147,10 @@ libc_hidden_proto (__libc_readline_unlocked);
 extern const char *const _sys_errlist_internal[] attribute_hidden;
 extern int _sys_nerr_internal attribute_hidden;
 
+#if !defined __LONG_DOUBLE_USES_FLOAT128 \
+  || (defined __LONG_DOUBLE_USES_FLOAT128 && __LONG_DOUBLE_USES_FLOAT128 == 0)
 libc_hidden_proto (__asprintf)
+#endif
 #  if IS_IN (libc)
 extern FILE *_IO_new_fopen (const char*, const char*);
 #   define fopen(fname, mode) _IO_new_fopen (fname, mode)
@@ -168,14 +171,17 @@ extern int _IO_new_fgetpos (FILE *, __fpos_t *);
 #   define fgetpos(fp, posp) _IO_new_fgetpos (fp, posp)
 #  endif
 
-libc_hidden_proto (dprintf)
 extern __typeof (dprintf) __dprintf
      __attribute__ ((__format__ (__printf__, 2, 3)));
 libc_hidden_proto (__dprintf)
+#if !defined __LONG_DOUBLE_USES_FLOAT128 \
+  || (defined __LONG_DOUBLE_USES_FLOAT128 && __LONG_DOUBLE_USES_FLOAT128 == 0)
+libc_hidden_proto (dprintf)
 libc_hidden_proto (fprintf)
 libc_hidden_proto (vfprintf)
 libc_hidden_proto (sprintf)
 libc_hidden_proto (sscanf)
+#endif
 libc_hidden_proto (fwrite)
 libc_hidden_proto (perror)
 libc_hidden_proto (remove)

@@ -1,5 +1,5 @@
 ifeq ($(subdir),stdio-common)
-routines += ieee128-printf_size
+ldbl-extra-routines += printf_size
 
 tests-internal += test-printf-size-ieee128 test-printf-size-ibm128
 CFLAGS-test-printf-size-ieee128.c += -mfloat128 -mabi=ieeelongdouble -Wno-psabi
@@ -20,3 +20,23 @@ $(objpfx)test-printf-size-ibm128.out: \
 	$(SHELL) $^ '$(test-program-prefix)' $@; \
 	$(evaluate-test)
 endif
+
+# Add IEEE binary128 files as make targets.
+routines += $(foreach r,$(ldbl-extra-routines),ieee128-$(r))
+
+# When a platform implies this directory, all files are built with
+# -mabi=ieeelongdouble by default.  However, most of the files that
+# implement floating-point to/from string conversion must be built with
+# -mabi=ibmlongdouble.  The following rule ensures that the correct
+# compiler flags are passed to these files.
+ldbl-ibm128-files := $(objpfx)test-%-ibm128^ \
+		     $(foreach r,$(ldbl-extra-routines),$(objpfx)$(r)^) \
+		     $(foreach r,$(ldbl-extra-routines),$(objpfx)$(r)-internal^)
+obj-suf-foreach = $(foreach suf,$(all-object-suffixes),$(subst ^,$(suf),$(1)))
+
+# Removing -mabi=ieeelongdouble is not required, but helps when
+# analyzing the flags that were passed to the compiler.
+$(call obj-suf-foreach,$(ldbl-ibm128-files)): \
+  sysdep-CFLAGS := $(filter-out -mabi=ieeelongdouble -Wno-psabi, \
+				$(sysdep-CFLAGS)) \
+		   -mabi=ibmlongdouble

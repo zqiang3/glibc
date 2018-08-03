@@ -569,10 +569,13 @@ open_archive (struct locarhandle *ah, bool readonly)
   /* If ah has a non-NULL fname open that otherwise open the default.  */
   if (archivefname == NULL)
     {
-      archivefname = default_fname;
-      if (output_prefix)
-        memcpy (default_fname, output_prefix, prefix_len);
-      strcpy (default_fname + prefix_len, ARCHIVE_NAME);
+      archivefname = getenv("LOCALEARCHIVE");
+      if (archivefname == NULL) {
+              archivefname = default_fname;
+              if (output_prefix)
+                memcpy (default_fname, output_prefix, prefix_len);
+              strcpy (default_fname + prefix_len, ARCHIVE_NAME);
+      }
     }
 
   while (1)
@@ -585,7 +588,7 @@ open_archive (struct locarhandle *ah, bool readonly)
 	     the default locale archive we ignore the failure and
 	     list an empty archive, otherwise we print an error
 	     and exit.  */
-	  if (errno == ENOENT && archivefname == default_fname)
+	  if (errno == ENOENT)
 	    {
 	      if (readonly)
 		{

@@ -89,10 +89,19 @@ tests := tst-dirname tst-tsearch tst-fdset tst-efgcvt tst-mntent tst-hsearch \
 tests-internal := tst-atomic tst-atomic-long tst-allocate_once
 tests-static := tst-empty
 
+tests-internal += tst-ldbl-warn
+
 ifeq ($(run-built-tests),yes)
 tests-special += $(objpfx)tst-error1-mem.out \
   $(objpfx)tst-allocate_once-mem.out
+
+tests-special += $(objpfx)tst-ldbl-warn.out
 endif
+
+$(objpfx)tst-ldbl-warn.out: \
+  tst-ldbl-warn.sh $(objpfx)tst-ldbl-warn
+	$(SHELL) $^ '$(test-program-prefix)' $@; \
+	$(evaluate-test)
 
 CFLAGS-select.c += -fexceptions -fasynchronous-unwind-tables
 CFLAGS-tsearch.c += $(uses-callbacks)

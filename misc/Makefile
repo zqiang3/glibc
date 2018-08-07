@@ -90,16 +90,33 @@ tests-internal := tst-atomic tst-atomic-long tst-allocate_once
 tests-static := tst-empty
 
 tests-internal += tst-ldbl-warn
+tests-internal += tst-ldbl-error-err
+tests-internal += tst-ldbl-error-errx
+tests-internal += tst-ldbl-error-verr
+tests-internal += tst-ldbl-error-verrx
+tests-internal += tst-ldbl-error-error
+tests-internal += tst-ldbl-error-error_at_line
 
 ifeq ($(run-built-tests),yes)
 tests-special += $(objpfx)tst-error1-mem.out \
   $(objpfx)tst-allocate_once-mem.out
 
 tests-special += $(objpfx)tst-ldbl-warn.out
+tests-special += $(objpfx)tst-ldbl-error-err.out
+tests-special += $(objpfx)tst-ldbl-error-errx.out
+tests-special += $(objpfx)tst-ldbl-error-verr.out
+tests-special += $(objpfx)tst-ldbl-error-verrx.out
+tests-special += $(objpfx)tst-ldbl-error-error.out
+tests-special += $(objpfx)tst-ldbl-error-error_at_line.out
 endif
 
 $(objpfx)tst-ldbl-warn.out: \
   tst-ldbl-warn.sh $(objpfx)tst-ldbl-warn
+	$(SHELL) $^ '$(test-program-prefix)' $@; \
+	$(evaluate-test)
+
+$(objpfx)tst-ldbl-error-%.out: \
+  tst-ldbl-error.sh $(objpfx)tst-ldbl-error-%
 	$(SHELL) $^ '$(test-program-prefix)' $@; \
 	$(evaluate-test)
 

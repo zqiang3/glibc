@@ -197,3 +197,46 @@ $(objpfx)tst-nldbl-argp-%.out: \
 	$(SHELL) $^ '$(test-program-prefix)' $@; \
 	$(evaluate-test)
 endif
+
+# Tests for err.h and error.h functions (reusing the relevant tests from
+# misc/).
+ifeq ($(subdir), misc)
+tests-internal += tst-nldbl-warn
+tests-internal += tst-nldbl-error-err
+tests-internal += tst-nldbl-error-errx
+tests-internal += tst-nldbl-error-verr
+tests-internal += tst-nldbl-error-verrx
+tests-internal += tst-nldbl-error-error
+tests-internal += tst-nldbl-error-error_at_line
+
+$(objpfx)tst-nldbl-%.c: tst-ldbl-%.c
+	cp $< $@
+
+CFLAGS-tst-nldbl-warn.c += -mlong-double-64
+CFLAGS-tst-nldbl-error-err.c += -mlong-double-64
+CFLAGS-tst-nldbl-error-errx.c += -mlong-double-64
+CFLAGS-tst-nldbl-error-verr.c += -mlong-double-64
+CFLAGS-tst-nldbl-error-verrx.c += -mlong-double-64
+CFLAGS-tst-nldbl-error-error.c += -mlong-double-64
+CFLAGS-tst-nldbl-error-error_at_line.c += -mlong-double-64
+
+ifeq ($(run-built-tests),yes)
+tests-special += $(objpfx)tst-nldbl-warn.out
+tests-special += $(objpfx)tst-nldbl-error-err.out
+tests-special += $(objpfx)tst-nldbl-error-errx.out
+tests-special += $(objpfx)tst-nldbl-error-verr.out
+tests-special += $(objpfx)tst-nldbl-error-verrx.out
+tests-special += $(objpfx)tst-nldbl-error-error.out
+tests-special += $(objpfx)tst-nldbl-error-error_at_line.out
+endif
+
+$(objpfx)tst-nldbl-warn.out: \
+  tst-ldbl-warn.sh $(objpfx)tst-nldbl-warn
+	$(SHELL) $^ '$(test-program-prefix)' $@; \
+	$(evaluate-test)
+
+$(objpfx)tst-nldbl-error-%.out: \
+  tst-ldbl-error.sh $(objpfx)tst-nldbl-error-%
+	$(SHELL) $^ '$(test-program-prefix)' $@; \
+	$(evaluate-test)
+endif

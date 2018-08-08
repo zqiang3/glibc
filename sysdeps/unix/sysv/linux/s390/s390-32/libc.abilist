@@ -2482,3 +2482,11 @@ GLIBC_2.9 updwtmp F
 GLIBC_2.9 updwtmpx F
 GLIBC_2.29 __nldbl_argp_error F
 GLIBC_2.29 __nldbl_argp_failure F
+GLIBC_2.29 __nldbl_err F
+GLIBC_2.29 __nldbl_errx F
+GLIBC_2.29 __nldbl_verr F
+GLIBC_2.29 __nldbl_verrx F
+GLIBC_2.29 __nldbl_vwarn F
+GLIBC_2.29 __nldbl_vwarnx F
+GLIBC_2.29 __nldbl_warn F
+GLIBC_2.29 __nldbl_warnx F

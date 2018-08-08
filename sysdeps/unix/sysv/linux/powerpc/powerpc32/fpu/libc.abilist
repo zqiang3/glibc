@@ -2473,6 +2473,8 @@ GLIBC_2.9 pipe2 F
 GLIBC_2.29 __nldbl_argp_error F
 GLIBC_2.29 __nldbl_argp_failure F
 GLIBC_2.29 __nldbl_err F
+GLIBC_2.29 __nldbl_error F
+GLIBC_2.29 __nldbl_error_at_line F
 GLIBC_2.29 __nldbl_errx F
 GLIBC_2.29 __nldbl_verr F
 GLIBC_2.29 __nldbl_verrx F

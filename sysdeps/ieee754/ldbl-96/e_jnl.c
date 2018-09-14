@@ -143,6 +143,8 @@ __ieee754_jnl (int n, long double x)
 	      case 3:
 		temp = c - s;
 		break;
+	      default:
+	        temp = 0; // just to prevent error: 'temp' may be used uninitialized in this function [-Werror=maybe-uninitialized]
 	      }
 	    b = invsqrtpi * temp / sqrtl (x);
 	  }
@@ -372,6 +374,8 @@ __ieee754_ynl (int n, long double x)
 	  case 3:
 	    temp = s + c;
 	    break;
+	  default:
+	    temp = 0; // just to prevent error: 'temp' may be used uninitialized in this function [-Werror=maybe-uninitialized]
 	  }
 	b = invsqrtpi * temp / sqrtl (x);
       }

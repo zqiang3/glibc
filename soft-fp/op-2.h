@@ -92,6 +92,8 @@
 	      X##_f1 = 0;						\
 	    }))
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wmaybe-uninitialized"
 #define _FP_FRAC_SRS_2(X, N, sz)					\
   (void) (((N) < _FP_W_TYPE_SIZE)					\
 	  ? ({								\
@@ -109,6 +111,7 @@
 			    | X##_f0) != 0));				\
 	      X##_f1 = 0;						\
 	    }))
+#pragma GCC diagnostic pop
 
 #define _FP_FRAC_ADDI_2(X, I)	\
   __FP_FRAC_ADDI_2 (X##_f1, X##_f0, I)
